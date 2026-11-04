@@ -27,3 +27,30 @@
 - **RLS** (Row Level Security) определяет, какие строки видны и изменяемы. Исполнитель видит только задачи, где он назначен, историю этих задач и объекты, в которых у него есть задачи. Создавать, менять и удалять объекты и задачи может только постановщик.
 - **`change_task_status()`** — единственный способ сменить статус. Функция проверяет роль, исполнителя задачи, допустимость перехода и комментарий, а затем записывает историю.
 - **Триггеры** запрещают менять статус в обход функции, ставить исполнителем не-исполнителя и изменять записи истории (даже администратору в SQL Editor).
+
+Миграция базы — [`supabase/migrations/0001_schema.sql`](supabase/migrations/0001_schema.sql), тестовые данные — [`supabase/seed.sql`](supabase/seed.sql).
+
+## Как запустить
+
+Нужен Node.js 20+ и бесплатный проект на [supabase.com](https://supabase.com).
+
+1. **Supabase:**
+   1. В **Authentication → Sign In / Providers** выключите **Allow new users to sign up**.
+   2. В **SQL Editor** выполните `0001_schema.sql`.
+   3. В **Authentication → Users → Add user** создайте трёх пользователей из таблицы выше с галочкой **Auto Confirm User**.
+   4. Выполните `seed.sql`.
+2. **Приложение:**
+   ```bash
+   cp .env.example .env.local   # Project URL и Publishable key из Project Settings → API Keys
+   npm install
+   npm run dev                  # http://localhost:5173
+   ```
+3. **Проверки безопасности:**
+   ```bash
+   npm run test:db              # схема и права во встроенном PostgreSQL, без Supabase
+   cp .env.test.example .env.test.local   # пароли тестовых пользователей
+   npm run security-check       # запросы к живому Supabase в обход интерфейса
+   ```
+4. **Netlify:** импортировать репозиторий (настройки сборки берутся из `netlify.toml`) и задать переменные `VITE_SUPABASE_URL` и `VITE_SUPABASE_PUBLISHABLE_KEY`.
+
+Постановщика назначают в SQL Editor: `update public.profiles set role = 'manager' where id = (select id from auth.users where email = '...');`
