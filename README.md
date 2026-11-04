@@ -35,10 +35,10 @@
 Нужен Node.js 20+ и бесплатный проект на [supabase.com](https://supabase.com).
 
 1. **Supabase:**
-   1. В **Authentication → Sign In / Providers** выключите **Allow new users to sign up**.
-   2. В **SQL Editor** выполните `0001_schema.sql`.
-   3. В **Authentication → Users → Add user** создайте трёх пользователей из таблицы выше с галочкой **Auto Confirm User**.
-   4. Выполните `seed.sql`.
+   - В **Authentication → Sign In / Providers** выключите **Allow new users to sign up**.
+   - В **SQL Editor** выполните `0001_schema.sql`.
+   - В **Authentication → Users → Add user** создайте трёх пользователей из таблицы выше с галочкой **Auto Confirm User**.
+   - Выполните `seed.sql`.
 2. **Приложение:**
    ```bash
    cp .env.example .env.local   # Project URL и Publishable key из Project Settings → API Keys
