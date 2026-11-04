@@ -16,7 +16,8 @@ export function ObjectFormModal({ open, object, onClose, onSaved }: Props) {
   const { message } = App.useApp()
 
   async function handleOk() {
-    const values = await form.validateFields()
+    const values = await form.validateFields().catch(() => null)
+    if (!values) return
     const input = { name: values.name.trim(), address: values.address.trim() }
     setSaving(true)
     try {

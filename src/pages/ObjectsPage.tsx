@@ -33,9 +33,9 @@ export function ObjectsPage() {
     },
     { title: 'Адрес', dataIndex: 'address' },
     {
-      title: isManager ? 'Задач (открытых / всего)' : 'Моих задач (открытых / всего)',
+      title: isManager ? 'Задачи: открытые / всего' : 'Мои задачи: открытые / всего',
       key: 'tasks',
-      width: 220,
+      width: 260,
       render: (_, o) => `${o.tasks.filter((t) => t.status !== 'accepted').length} / ${o.tasks.length}`,
     },
   ]

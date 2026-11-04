@@ -24,7 +24,8 @@ export function TaskFormModal({ open, task, defaultObjectId, onClose, onSaved }:
   const [objects, executors] = options.data ?? [[], []]
 
   async function handleOk() {
-    const values = await form.validateFields()
+    const values = await form.validateFields().catch(() => null)
+    if (!values) return
     const input: TaskInput = {
       object_id: values.object_id,
       assignee_id: values.assignee_id,

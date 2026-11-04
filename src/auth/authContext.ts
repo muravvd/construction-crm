@@ -7,6 +7,8 @@ export interface AuthState {
   profile: Profile | null
   profileError: string | null
   loading: boolean
+  // Пользователь сам нажал «Выйти»: после следующего входа не возвращаем на его последнюю страницу.
+  signedOut: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
 }

@@ -21,10 +21,11 @@ export function TaskStatusActions({ task, profile, onChanged }: Props) {
 
   async function handleOk() {
     if (!action) return
-    const { comment } = await form.validateFields()
+    const values = await form.validateFields().catch(() => null)
+    if (!values) return
     setSaving(true)
     try {
-      await changeTaskStatus(task.id, action.to, comment)
+      await changeTaskStatus(task.id, action.to, values.comment)
       message.success(`Статус изменён: «${STATUS_LABELS[action.to]}»`)
       setAction(null)
       onChanged()

@@ -14,6 +14,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // undefined — сессия ещё не прочитана из хранилища браузера
   const [session, setSession] = useState<Session | null | undefined>(undefined)
   const [loaded, setLoaded] = useState<ProfileResult | null>(null)
+  const [signedOut, setSignedOut] = useState(false)
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((_event, newSession) => setSession(newSession))
@@ -59,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       profileError,
       loading: session === undefined || (!!userId && !profile && !profileError),
+      signedOut,
       async signIn(email, password) {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) {
@@ -66,12 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message,
           )
         }
+        setSignedOut(false)
       },
       async signOut() {
+        setSignedOut(true)
         await supabase.auth.signOut()
       },
     }),
-    [session, userId, profile, profileError],
+    [session, userId, profile, profileError, signedOut],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
